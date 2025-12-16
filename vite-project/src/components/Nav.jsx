@@ -32,12 +32,14 @@ const Nav = () => {
         <div className="flex items-center gap-9">
           <img src={img2} alt="" />
           <img src={img3} alt="" />
-          <button className="w-[100px] h-[35px] bg-[#46A358] rounded-md flex items-center justify-center gap-3">
-            <img src={img4} alt="" />{" "}
-            <p className="font-medium text-[#FFFFFF] text-base leading-[100%] tracking-[0%]">
-              Login
-            </p>
-          </button>
+          <Link to="/login">
+            <button className="w-[100px] h-[35px] bg-[#46A358] rounded-md flex items-center justify-center gap-3">
+              <img src={img4} alt="" />
+              <p className="font-medium text-[#FFFFFF] text-base leading-[100%] tracking-[0%]">
+                Login
+              </p>
+            </button>
+          </Link>
         </div>
       </div>
     </>

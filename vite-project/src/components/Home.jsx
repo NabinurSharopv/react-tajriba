@@ -18,9 +18,9 @@ import img18 from "../img/img18.png";
 import img19 from "../img/img19.png";
 import img20 from "../img/img20.png";
 import img21 from "../img/img21.png";
-
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Link, Links } from "react-router-dom";
 
 const Home = () => {
   const [allProducts, setAllProducts] = useState([]);
@@ -31,21 +31,16 @@ const Home = () => {
       .get("https://69171cada7a34288a27f9293.mockapi.io/apis/bmw")
       .then((res) => {
         const products = res.data[0]?.products || [];
-
-        // --- Rasmlar to'g'irlash (blob → raw) ---
         const fixedProducts = products.map((p) => {
           let imageUrl = p.image;
-
           if (imageUrl?.includes("github.com") && imageUrl.includes("/blob/")) {
             imageUrl = imageUrl.replace("/blob/", "/raw/");
           }
-
           return {
             ...p,
             image: imageUrl,
           };
         });
-
         setAllProducts(fixedProducts);
         setLoading(false);
       })
@@ -159,66 +154,57 @@ const Home = () => {
         </div>
 
         {/* PRODUCTS */}
-        <div className="max-w-[890px]">
-          <h1 className="text-3xl font-bold mb-5 text-center">
-            🌿 O'simliklar
-          </h1>
+     {/* PRODUCTS */}
+<div className="max-w-[890px]">
+  <h1 className="text-3xl font-bold mb-5 text-center">
+    🌿 O'simliklar
+  </h1>
 
-          <div className="flex flex-wrap gap-6 justify-center">
-            {allProducts.map((item) => {
-              // gambarlarni to‘g‘irlash (blob → raw)
-              let imageUrl = item.image;
-              if (
-                imageUrl?.includes("github.com") &&
-                imageUrl.includes("/blob/")
-              ) {
-                imageUrl = imageUrl.replace("/blob/", "/raw/");
-              }
+  <div className="flex flex-wrap gap-6 justify-center">
+    {allProducts.map((item) => (
+      <Link
+        key={item.id}
+        to={`/bmw/${item.id}`}
+        className="w-[230px] border rounded-xl shadow p-4 flex flex-col hover:shadow-lg transition"
+      >
+        <img
+          src={item.image}
+          alt={item.title}
+          className="w-full h-40 object-cover rounded"
+          onError={(e) => {
+            e.target.src = "https://via.placeholder.com/200";
+          }}
+        />
 
-              return (
-                <div
-                  key={item.id}
-                  className="w-[230px] border rounded-xl shadow p-4 flex flex-col hover:shadow-lg transition"
-                >
-                  {/* Asosiy rasm */}
-                  <img
-                    src={imageUrl}
-                    alt={item.title}
-                    className="w-full h-40 object-cover rounded"
-                    onError={(e) =>
-                      (e.target.src = "https://via.placeholder.com/200")
-                    }
-                  />
+        <h2 className="text-lg font-bold mt-2">{item.title}</h2>
 
-                  {/* Title */}
-                  <h2 className="text-lg font-bold mt-2">{item.title}</h2>
+        <p className="text-green-700 font-semibold text-[18px]">
+          ${item.price}
+        </p>
 
-                  {/* Narxlar */}
-                  <p className="text-green-700 font-semibold text-[18px]">
-                    ${item.price}
-                  </p>
+        {item.oldPrice && (
+          <p className="text-gray-500 line-through text-sm">
+            ${item.oldPrice}
+          </p>
+        )}
 
-                  {item.oldPrice && (
-                    <p className="text-gray-500 line-through text-sm">
-                      ${item.oldPrice}
-                    </p>
-                  )}
+        <p className="text-yellow-500 mt-1">
+          ⭐ {item.rating}
+        </p>
 
-                  {/* Reyting */}
-                  <p className="text-yellow-500 mt-1">⭐ {item.rating}</p>
+        <p className="text-sm text-gray-600">
+          Kategoriya: {item.category}
+        </p>
 
-                  {/* Category */}
-                  <p className="text-sm text-gray-600">
-                    Kategoriya: {item.category}
-                  </p>
+        <p className="text-sm text-gray-600">
+          Size: {item.size}
+        </p>
+      </Link>
+    ))}
+  </div>
+</div>
 
-                  {/* Size */}
-                  <p className="text-sm text-gray-600">Size: {item.size}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+
       </div>
       <div className="flex mr-20 mt-19 items-center justify-center gap-11">
         <img className=" h-[282px]" src={img6} alt="" />
